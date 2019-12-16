@@ -199,6 +199,35 @@ const update_bookmarked = (request, response) => {
   );
 };
 
+const edit_profile = (request, response) => {
+  const password = request.body.password;
+  const id = request.body.id;
+  const name = request.body.name;
+  const email = request.body.email;
+
+  pool.query(
+    "select * from tbl_user where user_password = $1",
+    [password],
+    (error, results) => {
+      if (error) {
+        response.status(200).json({ code: 201, message: "failed" });
+      }
+    }
+  );
+
+  pool.query(
+    "UPDATE tbl_user SET user_first_name = $1, user_email = $2 WHERE user_id = $3",
+    [name, email, id],
+    (error, results) => {
+      if (error) {
+        response.status(200).json({ code: 201, message: "failed" });
+      }
+    }
+  );
+
+  response.status(200).json({ code: 200, message: "success" });
+};
+
 module.exports = {
   panti,
   panti_owner,
@@ -209,7 +238,8 @@ module.exports = {
   login_owner,
   detail_panti,
   bookmarked_panti,
-  update_bookmarked
+  update_bookmarked,
+  edit_profile
 };
 
 //post tapi bodynya banyak

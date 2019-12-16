@@ -34,6 +34,7 @@ app.post("/new-owner", cors(), query.new_owner);
 app.get("/detail-panti/:id", cors(), query.detail_panti);
 app.get("/bookmarked-panti", cors(), query.bookmarked_panti);
 app.post("/update-bookmarked", cors(), query.update_bookmarked);
+app.post("/edit-profile/:id", cors(), query.edit_profile);
 //get dengan parameter
 //app.get("/users/:id", query.xx);
 //app.post("/users", query.xx);
