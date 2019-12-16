@@ -198,6 +198,20 @@ const update_bookmarked = (request, response) => {
   );
 };
 
+const search_panti = (request, response) => {
+  const search = '%'+ request.body.search + '%';
+  pool.query(
+    "SELECT panti_nama AS title, panti_id AS id FROM tbl_panti WHERE LOWER(panti_nama) LIKE LOWER($1) AND panti_id > 0",
+    [search],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json(results.rows);
+    }
+  );
+};
+
 module.exports = {
   panti,
   panti_owner,
@@ -208,7 +222,8 @@ module.exports = {
   login_owner,
   detail_panti,
   bookmarked_panti,
-  update_bookmarked
+  update_bookmarked,
+  search_panti
 };
 
 //post tapi bodynya banyak
