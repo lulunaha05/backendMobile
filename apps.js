@@ -24,6 +24,7 @@ app.use(
   })
 );
 
+// endpoint
 app.get("/panti", cors(), query.panti);
 app.get("/panti/:id", cors(), query.kategori_panti);
 app.post("/login-user", cors(), query.login_user);
