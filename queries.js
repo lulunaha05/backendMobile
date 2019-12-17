@@ -237,6 +237,22 @@ const bookmark_panti = (request, response) => {
   );
 };
 
+const delete_bookmark = (request, response) => {
+  const id_user = request.body.id_user;
+  const id_panti = request.body.id_panti;
+
+  pool.query(
+    "DELETE FROM bookmarks Where id_user = $1 AND id_panti = $2",
+    [id_user, id_panti],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json({ code: 200, message: "success" });
+    }
+  );
+};
+
 module.exports = {
   panti,
   panti_owner,
@@ -248,7 +264,8 @@ module.exports = {
   detail_panti,
   edit_profile,
   search_panti,
-  bookmark_panti
+  bookmark_panti,
+  delete_bookmark
 };
 
 //post tapi bodynya banyak
