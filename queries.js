@@ -231,7 +231,7 @@ const edit_profile = (request, response) => {
 const search_panti = (request, response) => {
   const search = "%" + request.body.search + "%";
   pool.query(
-    "SELECT panti_nama AS title, panti_id AS id FROM tbl_panti WHERE LOWER(panti_nama) LIKE LOWER($1) AND panti_id > 0",
+    "SELECT panti_nama FROM tbl_panti WHERE LOWER(panti_nama) LIKE LOWER($1)",
     [search],
     (error, results) => {
       if (error) {
