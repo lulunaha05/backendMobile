@@ -253,6 +253,20 @@ const delete_bookmark = (request, response) => {
   );
 };
 
+const show_bookmark = (request, response) => {
+  pool.query(
+    "SELECT id_user, id_panti, panti_nama, kontak_panti, location_nama FROM bookmarks INNER JOIN tbl_panti ON bookmarks.id_panti = tbl_panti.panti_id INNER JOIN tbl_user ON bookmarks.id_user = tbl_user.user_id INNER JOIN tbl_location ON tbl_location.id_location = tbl_panti.id_location",
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response
+        .status(200)
+        .json({ code: 200, message: "success", data: results.rows });
+    }
+  );
+};
+
 module.exports = {
   panti,
   panti_owner,
@@ -265,7 +279,8 @@ module.exports = {
   edit_profile,
   search_panti,
   bookmark_panti,
-  delete_bookmark
+  delete_bookmark,
+  show_bookmark
 };
 
 //post tapi bodynya banyak
