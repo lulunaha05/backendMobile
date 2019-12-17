@@ -169,36 +169,6 @@ const detail_panti = (request, response) => {
   );
 };
 
-const bookmarked_panti = (request, response) => {
-  // const id = request.params.id;
-  pool.query(
-    "select panti_id, panti_nama, kontak_panti from tbl_panti where isbookmarked=true",
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-      response.status(200).json(results.rows);
-    }
-  );
-};
-
-const update_bookmarked = (request, response) => {
-  const id = request.body.id;
-  pool.query(
-    "update tbl_panti set isbookmarked = true where panti_id=$1",
-    [id],
-    (error, results) => {
-      console.log(results.rows);
-      if (error) {
-        throw error;
-      }
-      response.status(200).json({
-        success: true
-      });
-    }
-  );
-};
-
 const edit_profile = (request, response) => {
   const password = request.body.password;
   const id = request.body.id;
@@ -242,6 +212,21 @@ const search_panti = (request, response) => {
   );
 };
 
+const bookmark_panti = (request, response) => {
+  const id_user = request.body.id_user;
+  const id_panti = request.body.id_panti;
+  pool.query(
+    "INSERT INTO bookmarks (id_user, id_panti) VALUES ($1,$2)",
+    [id_user, id_panti],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json({ code: 200, message: "success" });
+    }
+  );
+};
+
 module.exports = {
   panti,
   panti_owner,
@@ -251,10 +236,9 @@ module.exports = {
   new_owner,
   login_owner,
   detail_panti,
-  bookmarked_panti,
-  update_bookmarked,
   edit_profile,
-  search_panti
+  search_panti,
+  bookmark_panti
 };
 
 //post tapi bodynya banyak
