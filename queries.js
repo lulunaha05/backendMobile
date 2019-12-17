@@ -215,14 +215,24 @@ const search_panti = (request, response) => {
 const bookmark_panti = (request, response) => {
   const id_user = request.body.id_user;
   const id_panti = request.body.id_panti;
+
   pool.query(
-    "INSERT INTO bookmarks (id_user, id_panti) VALUES ($1,$2)",
+    "SELECT * FROM bookmarks WHERE id_user=$1 AND id_panti=$2",
     [id_user, id_panti],
     (error, results) => {
-      if (error) {
-        throw error;
+      if (results.rows.length > 0) {
+        return response.status(201).json({ code: 201, message: "Failed" });
       }
-      response.status(200).json({ code: 200, message: "success" });
+      pool.query(
+        "INSERT INTO bookmarks (id_user, id_panti) VALUES ($1,$2)",
+        [id_user, id_panti],
+        (salah, hasil) => {
+          if (salah) {
+            throw salah;
+          }
+          response.status(200).json({ code: 200, message: "success" });
+        }
+      );
     }
   );
 };
