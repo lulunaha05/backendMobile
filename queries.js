@@ -95,7 +95,7 @@ const new_owner = async (request, response) => {
 
   await pool.query('INSERT INTO tbl_panti(panti_nama,kontak_panti,jumlah_penghuni,kategori_panti,owner_kode) VALUES($1,$2,$3,$4,$5)', [nama_panti, telepon_panti, jumlah_penghuni, kategori_panti, kode_owner.rows[0].owner_kode]);
 
-
+  console.log("hadir");
 
   return response.send({ "message": 'Insert success !', code: 200 })
   // pool.query(
