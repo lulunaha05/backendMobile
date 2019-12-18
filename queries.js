@@ -52,14 +52,18 @@ const new_user = (request, response) => {
   const password = request.body.password;
   const first_name = request.body.first_name;
   const last_name = request.body.last_name;
+  var hash = crypto
+    .createHash("md5")
+    .update(password)
+    .digest("hex");
 
   pool.query(
     "INSERT INTO tbl_user (user_first_name, user_last_name, user_email,user_password) VALUES ($1,$2,$3,$4)",
-    [first_name, last_name, email, password],
+    [first_name, last_name, email, hash],
     (error, results) => {
       console.log(results.rows);
       if (error) {
-        throw error;
+        return response.status(200).json({ code: 201, message: "failed" });
       } else {
         return response.status(200).send({
           success: true,
