@@ -37,9 +37,10 @@ app.post("/search-panti", cors(), query.search_panti);
 app.post("/bookmark-panti", cors(), query.bookmark_panti);
 app.post("/delete-panti", cors(), query.delete_bookmark);
 app.post("/show-bookmark", cors(), query.show_bookmark);
+
 //get dengan parameter
-//app.get("/users/:id", query.xx);
-//app.post("/users", query.xx);
+//app.get("/users/:id",cors(), query.xx);
+//app.post("/users",cors(), query.xx);
 
 app.listen(process.env.PORT || 3000, function () {
   console.log(`App running on port ${port}`);
