@@ -75,28 +75,29 @@ const new_user = (request, response) => {
   );
 };
 
-const new_owner = (request, response) => {
+const new_owner = async (request, response) => {
   const email = request.body.email;
   const password = request.body.password;
   const first_name = request.body.first_name;
   const last_name = request.body.last_name;
-  const alamat_owner = request.body.alamat;
+  const alamat_owner = request.body.alamat_owner;
   const telepon_owner = request.body.telepon_owner;
   const nama_panti = request.body.nama_panti;
-  const alamat_panti = request.body.alamat_panti;
   const telepon_panti = request.body.telepon_panti;
   const jumlah_penghuni = request.body.jumlah_penghuni;
   const kategori_panti = request.body.kategori_panti;
-  var kode_owner;
+  var kode_owner = [];
 
-  // kode_owner = await pool.query('INSERT INTO tbl_owner(owner_alamat, owner_telepon, owner_firstname, owner_lastname, owner_email, owner_password) VALUES ($1,$2,$3,$4,$5,$6) returning owner_kode', [alamat_owner, telepon_owner, first_name, last_name, email, password])
+  kode_owner = await pool.query('INSERT INTO tbl_owner(owner_alamat, owner_telepon, owner_firstname, owner_lastname, owner_email,owner_password)VALUES ($1,$2,$3,$4,$5,$6) returning owner_kode', [alamat_owner, telepon_owner, first_name, last_name, email, password])
 
-  // console.log("ownerkode => ", kode_owner);
-  // console.log(kode_owner[0].kode_owner);
+  console.log("ownerkode => ", kode_owner);
+  console.log("kodenya", kode_owner.rows[0].owner_kode);
 
-  // await pool.query('INSERT INTO tbl_panti(panti_nama,kontak_panti,jumlah_penghuni,kategori_panti,id_location,gambar_id,owner_kode VALUES($1,$2,$3,$4,"-","-",&7)', [nama_panti, telepon_panti, jumlah_penghuni, kategori_panti, kode_owner[0].kode_owner])
+  await pool.query('INSERT INTO tbl_panti(panti_nama,kontak_panti,jumlah_penghuni,kategori_panti,owner_kode) VALUES($1,$2,$3,$4,$5)', [nama_panti, telepon_panti, jumlah_penghuni, kategori_panti, kode_owner.rows[0].owner_kode]);
 
-  // return response.send({ "message": 'Insert success !', code: 200 })
+  console.log("hadir");
+
+  return response.send({ "message": 'Insert success !', code: 200 })
   // pool.query(
   //   "INSERT INTO tbl_owner (owner_alamat, owner_telepon, owner_firstname, owner_lastname, owner_email, owner_password) VALUES ($1,$2,$3,$4,$5,$6)",
   //   [alamat, telepon, first_name, last_name, email, password],
