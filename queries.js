@@ -317,20 +317,3 @@ module.exports = {
   delete_bookmark,
   show_bookmark
 };
-
-//post tapi bodynya banyak
-// var {param1, param2} = request.body
-//get
-//const _param = request.params.id
-
-// pool.query(
-//   "SELECT * FROM tbl_panti WHERE id_panti = $1",
-//   [id],
-//   [nama],
-//   (error, results) => {
-//     if (error) {
-//       throw error;
-//     }
-//     response.status(200).json(results.rows);
-//   }
-// );
