@@ -80,7 +80,7 @@ const new_owner = (request, response) => {
   const password = request.body.password;
   const first_name = request.body.first_name;
   const last_name = request.body.last_name;
-  const alamat = request.body.alamat;
+  const alamat_owner = request.body.alamat;
   const telepon = request.body.telepon;
 
   pool.query(
@@ -221,7 +221,7 @@ const edit_profile = async (request, response) => {
 const search_panti = (request, response) => {
   const search = "%" + request.body.search + "%";
   pool.query(
-    "SELECT panti_id panti_nama, kontak_panti, location_nama FROM tbl_panti INNER JOIN tbl_location ON tbl_location.id_location = tbl_panti.id_location WHERE LOWER(panti_nama) LIKE LOWER($1)",
+    "SELECT panti_id , panti_nama, kontak_panti, location_nama FROM tbl_panti INNER JOIN tbl_location ON tbl_location.id_location = tbl_panti.id_location WHERE LOWER(panti_nama) LIKE LOWER($1)",
     [search],
     (error, results) => {
       if (error) {
