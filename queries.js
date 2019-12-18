@@ -1,4 +1,7 @@
 const Pool = require("pg").Pool;
+const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
+
 const pool = new Pool({
   user: "xodcpesnvrotee",
   host: "ec2-174-129-253-113.compute-1.amazonaws.com",
@@ -52,10 +55,11 @@ const new_user = (request, response) => {
   const password = request.body.password;
   const first_name = request.body.first_name;
   const last_name = request.body.last_name;
-  var hash = crypto.createHash("md5").update(password).digest("hex");
+  var hash = crypto.createHash('md5').update(password).digest('hex');
+  console.log(hash);
 
   pool.query(
-    "INSERT INTO tbl_user (user_first_name, user_last_name, user_email,user_password) VALUES ($1,$2,$3,$4)",
+    "INSERT INTO tbl_user (user_first_name, user_last_name, user_email, user_password) VALUES ($1,$2,$3,$4)",
     [first_name, last_name, email, hash],
     (error, results) => {
       console.log(results.rows);
@@ -98,7 +102,7 @@ const new_owner = (request, response) => {
 
 const login_user = (request, response) => {
   const email = request.body.email;
-  const password = request.body.password;
+  const password = crypto.createHash('md5').update(request.body.password).digest('hex');
   console.log("ini email", request.body.email);
 
   if (!email || !password) {
@@ -112,9 +116,24 @@ const login_user = (request, response) => {
       "SELECT * FROM tbl_user WHERE user_email = $1",
       [email],
       (error, results) => {
+
+        if (results.rows.length < 1) {
+          console.log("email tidak terdaftar !");
+          return response.send({ "message": 'User not found!', code: 404 });
+        }
+
+        console.log("results => ", results)
+        console.log("ini password ", password)
+        console.log("ini pass dari DB ", results.rows[0].user_password)
         console.log(results.rows);
         if (error) {
           throw error;
+        }
+        const result = bcrypt.compareSync(password, bcrypt.hashSync(results.rows[0].user_password, 10))
+        console.log("const result lewat")
+        if (!result) {
+          response.status(401).send('Password not valid!')
+          return;
         }
         return response.status(200).json({
           success: true,
