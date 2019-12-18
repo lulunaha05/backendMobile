@@ -81,23 +81,37 @@ const new_owner = (request, response) => {
   const first_name = request.body.first_name;
   const last_name = request.body.last_name;
   const alamat_owner = request.body.alamat;
-  const telepon = request.body.telepon;
+  const telepon_owner = request.body.telepon_owner;
+  const nama_panti = request.body.nama_panti;
+  const alamat_panti = request.body.alamat_panti;
+  const telepon_panti = request.body.telepon_panti;
+  const jumlah_penghuni = request.body.jumlah_penghuni;
+  const kategori_panti = request.body.kategori_panti;
+  var kode_owner;
 
-  pool.query(
-    "INSERT INTO tbl_owner (owner_alamat, owner_telepon, owner_firstname, owner_lastname, owner_email, owner_password) VALUES ($1,$2,$3,$4,$5,$6)",
-    [alamat, telepon, first_name, last_name, email, password],
-    (error, results) => {
-      console.log(results.rows);
-      if (error) {
-        throw error;
-      } else {
-        return response.status(200).send({
-          success: true,
-          signup: true
-        });
-      }
-    }
-  );
+  // kode_owner = await pool.query('INSERT INTO tbl_owner(owner_alamat, owner_telepon, owner_firstname, owner_lastname, owner_email, owner_password) VALUES ($1,$2,$3,$4,$5,$6) returning owner_kode', [alamat_owner, telepon_owner, first_name, last_name, email, password])
+
+  // console.log("ownerkode => ", kode_owner);
+  // console.log(kode_owner[0].kode_owner);
+
+  // await pool.query('INSERT INTO tbl_panti(panti_nama,kontak_panti,jumlah_penghuni,kategori_panti,id_location,gambar_id,owner_kode VALUES($1,$2,$3,$4,"-","-",&7)', [nama_panti, telepon_panti, jumlah_penghuni, kategori_panti, kode_owner[0].kode_owner])
+
+  // return response.send({ "message": 'Insert success !', code: 200 })
+  // pool.query(
+  //   "INSERT INTO tbl_owner (owner_alamat, owner_telepon, owner_firstname, owner_lastname, owner_email, owner_password) VALUES ($1,$2,$3,$4,$5,$6)",
+  //   [alamat, telepon, first_name, last_name, email, password],
+  //   (error, results) => {
+  //     console.log(results.rows);
+  //     if (error) {
+  //       throw error;
+  //     } else {
+  //       return response.status(200).send({
+  //         success: true,
+  //         signup: true
+  //       });
+  //     }
+  //   }
+  // );
 };
 
 const login_user = (request, response) => {
@@ -274,15 +288,15 @@ const delete_bookmark = (request, response) => {
 };
 
 const show_bookmark = (request, response) => {
+  const id = request.body.id;
   pool.query(
-    "SELECT id_user, id_panti, panti_nama, kontak_panti, location_nama FROM bookmarks INNER JOIN tbl_panti ON bookmarks.id_panti = tbl_panti.panti_id INNER JOIN tbl_user ON bookmarks.id_user = tbl_user.user_id INNER JOIN tbl_location ON tbl_location.id_location = tbl_panti.id_location",
+    "SELECT id_user, id_panti, panti_nama, kontak_panti, location_nama FROM bookmarks INNER JOIN tbl_panti ON bookmarks.id_panti = tbl_panti.panti_id INNER JOIN tbl_user ON bookmarks.id_user = tbl_user.user_id INNER JOIN tbl_location ON tbl_location.id_location = tbl_panti.id_location WHERE tbl_user.user_id = $1",
+    [id],
     (error, results) => {
       if (error) {
         throw error;
       }
-      response
-        .status(200)
-        .json({ code: 200, message: "success", data: results.rows });
+      response.status(200).json({ code: 200, message: "success", data: results.rows });
     }
   );
 };
