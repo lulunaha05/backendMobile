@@ -189,39 +189,39 @@ const detail_panti = (request, response) => {
   );
 };
 
-const edit_profile = (request, response) => {
-  const password = request.body.password;
+const edit_profile = async (request, response) => {
+  const password = crypto.createHash('md5').update(request.body.password).digest('hex');
   const id = request.body.id;
   const name = request.body.name;
   const email = request.body.email;
 
-  pool.query(
-    "select * from tbl_user where user_password = $1",
-    [password],
-    (error, results) => {
-      if (error) {
-        response.status(200).json({ code: 201, message: "failed" });
-      }
-    }
-  );
+  var results = await pool.query(
+    "select * from tbl_user where user_id = $1", [id]);
+  console.log("results => ", results.rows)
+  console.log("ini password ", password)
+  console.log("ini pass dari DB ", results.rows[0].user_password)
 
-  pool.query(
+  const result = bcrypt.compareSync(password, bcrypt.hashSync(results.rows[0].user_password, 10))
+  if (!result) {
+    return response.status(401).send('Password not valid!');
+  }
+  await pool.query(
     "UPDATE tbl_user SET user_first_name = $1, user_email = $2 WHERE user_id = $3",
-    [name, email, id],
-    (error, results) => {
-      if (error) {
-        response.status(200).json({ code: 201, message: "failed" });
-      }
-    }
-  );
+    [name, email, id]);
 
-  response.status(200).json({ code: 200, message: "success" });
+  // (error, results) => {
+  //   if (error) {
+  //     return response.status(200).json({ code: 201, message: "failed" });
+  //   }
+  // }
+
+  return response.status(200).json({ code: 200, message: "success" });
 };
 
 const search_panti = (request, response) => {
   const search = "%" + request.body.search + "%";
   pool.query(
-    "SELECT panti_nama, kontak_panti, location_nama FROM tbl_panti INNER JOIN tbl_location ON tbl_location.id_location = tbl_panti.id_location WHERE LOWER(panti_nama) LIKE LOWER($1)",
+    "SELECT panti_id panti_nama, kontak_panti, location_nama FROM tbl_panti INNER JOIN tbl_location ON tbl_location.id_location = tbl_panti.id_location WHERE LOWER(panti_nama) LIKE LOWER($1)",
     [search],
     (error, results) => {
       if (error) {
