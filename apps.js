@@ -33,7 +33,7 @@ app.post("/login-owner", cors(), query.login_owner);
 app.post("/new-owner", cors(), query.new_owner);
 app.get("/detail-panti/:id", cors(), query.detail_panti);
 app.post("/edit-profile/:id", cors(), query.edit_profile);
-app.get("/search-panti", cors(), query.search_panti);
+app.post("/search-panti", cors(), query.search_panti);
 app.post("/bookmark-panti", cors(), query.bookmark_panti);
 app.post("/delete-panti", cors(), query.delete_bookmark);
 app.get("/show-bookmark", cors(), query.show_bookmark);
