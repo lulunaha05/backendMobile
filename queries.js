@@ -11,6 +11,7 @@ const pool = new Pool({
   ssl: true
 });
 
+//Back-End
 const panti = (request, response) => {
   pool.query(
     "SELECT * FROM tbl_panti INNER JOIN tbl_gambar ON tbl_panti.gambar_id= tbl_gambar.gambar_id",
