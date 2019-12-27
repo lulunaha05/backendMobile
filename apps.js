@@ -24,7 +24,7 @@ app.use(
   })
 );
 
-// endpoint
+//Endpoint
 app.get("/panti", cors(), query.panti);
 app.get("/panti/:id", cors(), query.kategori_panti);
 app.post("/login-user", cors(), query.login_user);
@@ -38,7 +38,7 @@ app.post("/bookmark-panti", cors(), query.bookmark_panti);
 app.post("/delete-panti", cors(), query.delete_bookmark);
 app.post("/show-bookmark", cors(), query.show_bookmark);
 
-//get dengan parameter
+//get dan post dengan parameter
 //app.get("/users/:id",cors(), query.xx);
 //app.post("/users",cors(), query.xx);
 
